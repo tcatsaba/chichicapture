@@ -47,7 +47,7 @@ public partial class MainWindow:Window
  string Hotkey(bool w)=>$"{((w?settings.WindowCtrl:settings.Ctrl)?"Ctrl+":"")}{((w?settings.WindowShift:settings.Shift)?"Shift+":"")}{((w?settings.WindowAlt:settings.Alt)?"Alt+":"")}{(char)(w?settings.WindowHotKey:settings.HotKey)}";
  void Unregister(){var h=new WindowInteropHelper(this).Handle;if(h!=IntPtr.Zero){UnregisterHotKey(h,HK);UnregisterHotKey(h,HK_WINDOW);}if(hookSource!=null){hookSource.RemoveHook(Hook);hookSource=null;}}
  IntPtr Hook(IntPtr h,int m,IntPtr w,IntPtr l,ref bool done){if(m==WM_HOTKEY){if(w.ToInt32()==HK){done=true;BeginRegion();}else if(w.ToInt32()==HK_WINDOW){done=true;BeginWindow();}}return IntPtr.Zero;}
- void Main_KeyDown(object s,KeyEventArgs e){if(e.Key==Key.Z&&Keyboard.Modifiers.HasFlag(ModifierKeys.Control)){Undo();e.Handled=true;}else if(e.Key==Key.Escape&&cropFrame!=null){CancelCrop_Click(this,new RoutedEventArgs());e.Handled=true;}}
+ void Main_KeyDown(object s,System.Windows.Input.KeyEventArgs e){if(e.Key==Key.Z&&Keyboard.Modifiers.HasFlag(ModifierKeys.Control)){Undo();e.Handled=true;}else if(e.Key==Key.Escape&&cropFrame!=null){CancelCrop_Click(this,new RoutedEventArgs());e.Handled=true;}}
 
  void RegionCapture_Click(object s,RoutedEventArgs e)=>BeginRegion();void WindowCapture_Click(object s,RoutedEventArgs e)=>BeginWindow();
  void BeginRegion(){Hide();Thread.Sleep(100);var p=new RegionWindow();if(p.ShowDialog()==true)Capture(p.Selection);else Restore();}
