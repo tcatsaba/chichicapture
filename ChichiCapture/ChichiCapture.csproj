@@ -7,5 +7,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>ChichiCapture</AssemblyName>
+    <ApplicationIcon>Assets\chichi.ico</ApplicationIcon>
   </PropertyGroup>
+  <ItemGroup><EmbeddedResource Include="Assets\chichi.ico" LogicalName="ChichiCapture.chichi.ico"/></ItemGroup>
 </Project>
