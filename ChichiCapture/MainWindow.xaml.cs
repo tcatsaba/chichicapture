@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using Forms=System.Windows.Forms;
 using Point=System.Windows.Point;
 using Rectangle=System.Windows.Shapes.Rectangle;
+using Brushes=System.Windows.Media.Brushes;
 
 namespace ChichiCapture;
 public partial class MainWindow:Window
@@ -51,7 +52,7 @@ public partial class MainWindow:Window
 
  void RegionCapture_Click(object s,RoutedEventArgs e)=>BeginRegion();void WindowCapture_Click(object s,RoutedEventArgs e)=>BeginWindow();
  void BeginRegion(){Hide();Thread.Sleep(100);var p=new RegionWindow();if(p.ShowDialog()==true)Capture(p.Selection);else Restore();}
- void BeginWindow(){var h=GetForegroundWindow(),own=new WindowInteropHelper(this).Handle;Hide();Thread.Sleep(180);if(h==own)h=GetForegroundWindow();if(h!=IntPtr.Zero&&!IsIconic(h)&&GetWindowRect(h,out var r)&&r.Right>r.Left&&r.Bottom>r.Top)Capture(new Rect(r.Left,r.Top,r.Right-r.Left,r.Bottom-r.Top));else Restore();}
+ void BeginWindow(){var h=GetForegroundWindow();var own=new WindowInteropHelper(this).Handle;Hide();Thread.Sleep(180);if(h==own)h=GetForegroundWindow();if(h!=IntPtr.Zero&&!IsIconic(h)&&GetWindowRect(h,out var r)&&r.Right>r.Left&&r.Bottom>r.Top)Capture(new Rect(r.Left,r.Top,r.Right-r.Left,r.Bottom-r.Top));else Restore();}
  void Capture(Rect r){using var bmp=new Bitmap((int)r.Width,(int)r.Height,PixelFormat.Format32bppArgb);using(var g=Graphics.FromImage(bmp))g.CopyFromScreen((int)r.X,(int)r.Y,0,0,bmp.Size);Restore();using var ms=new MemoryStream();bmp.Save(ms,ImageFormat.Png);ms.Position=0;var bi=new BitmapImage();bi.BeginInit();bi.CacheOption=BitmapCacheOption.OnLoad;bi.StreamSource=ms;bi.EndInit();bi.Freeze();SetSource(bi);AutoSave();}
  void SetSource(BitmapSource bi,bool addHistory=true,bool clearUndo=true){source=bi;CaptureImage.Source=bi;Overlay.Children.Clear();cropFrame=null;if(clearUndo)undo.Clear();Overlay.Width=EditorHost.Width=bi.PixelWidth;Overlay.Height=EditorHost.Height=bi.PixelHeight;if(addHistory){var x=new CaptureEntry{Image=bi,Title=$"Capture_{DateTime.Now:HH-mm-ss}.png"};HistoryList.Items.Insert(0,x);HistoryList.SelectedItem=x;while(HistoryList.Items.Count>30)HistoryList.Items.RemoveAt(HistoryList.Items.Count-1);}StatusText.Text=$"캡처 완료: {bi.PixelWidth}×{bi.PixelHeight}";}
  void HistoryList_SelectionChanged(object s,SelectionChangedEventArgs e){if(HistoryList.SelectedItem is CaptureEntry x&&x.Image!=source)SetSource(x.Image,false);}
