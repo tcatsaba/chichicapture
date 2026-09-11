@@ -3,7 +3,7 @@
   <Border DockPanel.Dock="Top" Background="#252936" Padding="10">
    <WrapPanel>
     <Button Content="영역 캡처" Click="RegionCapture_Click"/><Button Content="창 캡처" Click="WindowCapture_Click"/>
-    <Separator/><Button Content="선택" Click="SelectTool_Click"/><Button Content="자르기" Click="CropTool_Click"/><Button Content="펜" Click="PenTool_Click"/>
+    <Separator/><Button Content="선택/이동" Click="SelectTool_Click"/><Button Content="자르기 틀" Click="CropTool_Click"/><Button Content="자르기 적용" Click="ApplyCrop_Click"/><Button Content="틀 취소" Click="CancelCrop_Click"/><Button Content="펜" Click="PenTool_Click"/>
     <Button Content="화살표" Click="ArrowTool_Click"/><Button Content="사각형" Click="RectTool_Click"/><Button Content="타원" Click="EllipseTool_Click"/>
     <Button Content="텍스트" Click="TextTool_Click"/><Button Content="모자이크" Click="MosaicTool_Click"/>
     <CheckBox x:Name="FillShape" Content="도형 채우기" Foreground="White" VerticalAlignment="Center" Margin="10,0"/>
@@ -16,7 +16,7 @@
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"><Button Content="클립보드 복사" Click="Copy_Click"/><Button Content="PNG 저장" Click="SavePng_Click"/><Button Content="설정" Click="Settings_Click"/></StackPanel>
    </DockPanel>
   </Border>
-  <Border DockPanel.Dock="Right" Width="220" Background="White" BorderBrush="#D4D8E0" BorderThickness="1,0,0,0"><DockPanel><TextBlock DockPanel.Dock="Top" Text="최근 캡처" FontSize="16" FontWeight="Bold" Padding="12"/><ListBox x:Name="HistoryList" SelectionChanged="HistoryList_SelectionChanged" BorderThickness="0"><ListBox.ItemTemplate><DataTemplate><Border Margin="6" Padding="5" BorderBrush="#D5D9E2" BorderThickness="1" CornerRadius="5"><StackPanel><Image Source="{Binding Image}" Height="105" Stretch="Uniform"/><TextBlock Text="{Binding Title}" Margin="2,5,2,0" TextTrimming="CharacterEllipsis"/></StackPanel></Border></DataTemplate></ListBox.ItemTemplate></ListBox></DockPanel></Border>
+  <Border DockPanel.Dock="Right" Width="220" Background="White" BorderBrush="#D4D8E0" BorderThickness="1,0,0,0"><DockPanel><Grid DockPanel.Dock="Top" Margin="8"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="최근 캡처" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/><Button Grid.Column="1" Content="삭제" Click="DeleteHistory_Click" Padding="5,3"/><Button Grid.Column="2" Content="전체 삭제" Click="ClearHistory_Click" Padding="5,3"/></Grid><ListBox x:Name="HistoryList" SelectionChanged="HistoryList_SelectionChanged" BorderThickness="0"><ListBox.ItemTemplate><DataTemplate><Border Margin="6" Padding="5" BorderBrush="#D5D9E2" BorderThickness="1" CornerRadius="5"><StackPanel><Image Source="{Binding Image}" Height="105" Stretch="Uniform"/><TextBlock Text="{Binding Title}" Margin="2,5,2,0" TextTrimming="CharacterEllipsis"/></StackPanel></Border></DataTemplate></ListBox.ItemTemplate></ListBox></DockPanel></Border>
   <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"><Grid x:Name="EditorHost" Background="#CBD0DA" MouseLeftButtonDown="Host_Down" MouseMove="Host_Move" MouseLeftButtonUp="Host_Up"><Image x:Name="CaptureImage" Stretch="None"/><Canvas x:Name="Overlay" Background="Transparent"/></Grid></ScrollViewer>
  </DockPanel>
 </Window>
