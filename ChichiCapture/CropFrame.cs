@@ -1,4 +1,4 @@
-using System.Windows;using System.Windows.Controls;using System.Windows.Controls.Primitives;using System.Windows.Input;using System.Windows.Media;
+using System.Windows;using System.Windows.Controls;using System.Windows.Controls.Primitives;using System.Windows.Input;using System.Windows.Media;using Brushes=System.Windows.Media.Brushes;using Cursors=System.Windows.Input.Cursors;using Color=System.Windows.Media.Color;
 namespace ChichiCapture;
 public sealed class CropFrame:Canvas{
  readonly System.Windows.Shapes.Rectangle frame;readonly Thumb handle;bool moving;System.Windows.Point down;double left,top;
