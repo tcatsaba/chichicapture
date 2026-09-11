@@ -1,0 +1,3 @@
+using System.Text.Json;
+namespace ChichiCapture;
+public sealed class AppSettings{public bool AutoSave{get;set;}=true;public string SaveFolder{get;set;}=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),"ChichiCapture");public int HotKey{get;set;}=(int)System.Windows.Forms.Keys.A;public bool Ctrl{get;set;}=true;public bool Shift{get;set;}=true;public bool Alt{get;set;}=false;static string FilePath=>Path.Combine(AppContext.BaseDirectory,"ChichiCapture.settings.json");public static AppSettings Load(){try{return JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(FilePath))??new();}catch{return new();}}public void Save(){File.WriteAllText(FilePath,JsonSerializer.Serialize(this,new JsonSerializerOptions{WriteIndented=true}));}}
