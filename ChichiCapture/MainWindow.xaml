@@ -3,7 +3,7 @@
   <Border DockPanel.Dock="Top" Background="#252936" Padding="10">
    <WrapPanel>
     <Button Content="영역 캡처" Click="RegionCapture_Click"/><Button Content="창 캡처" Click="WindowCapture_Click"/>
-    <Separator/><Button Content="선택/이동" Click="SelectTool_Click"/><Button Content="자르기 틀" Click="CropTool_Click"/><Button Content="자르기 적용" Click="ApplyCrop_Click"/><Button Content="틀 취소" Click="CancelCrop_Click"/><Button Content="펜" Click="PenTool_Click"/>
+    <Separator/><Button Content="선택/이동" Click="SelectTool_Click"/><Button Content="선택 삭제" Click="DeleteSelected_Click" ToolTip="선택한 편집 요소 삭제 (Delete)"/><Button Content="자르기 틀" Click="CropTool_Click"/><Button Content="자르기 적용" Click="ApplyCrop_Click"/><Button Content="틀 취소" Click="CancelCrop_Click"/><Button Content="펜" Click="PenTool_Click"/>
     <Button Content="화살표" Click="ArrowTool_Click"/><Button Content="사각형" Click="RectTool_Click"/><Button Content="타원" Click="EllipseTool_Click"/>
     <Button Content="텍스트" Click="TextTool_Click"/><Button Content="모자이크" Click="MosaicTool_Click"/>
     <CheckBox x:Name="FillShape" Content="도형 채우기" Foreground="White" VerticalAlignment="Center" Margin="10,0"/>
