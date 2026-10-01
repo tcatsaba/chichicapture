@@ -13,7 +13,7 @@
   </Border>
   <Border DockPanel.Dock="Bottom" Background="White" Padding="8">
    <DockPanel><TextBlock x:Name="StatusText" Text="영역 또는 창을 캡처하세요." VerticalAlignment="Center"/>
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"><Button Content="클립보드 복사" Click="Copy_Click"/><Button Content="PNG 저장" Click="SavePng_Click"/><Button Content="설정" Click="Settings_Click"/></StackPanel>
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"><Button Content="PNG 저장" Click="SavePng_Click"/><Button Content="설정" Click="Settings_Click"/></StackPanel>
    </DockPanel>
   </Border>
   <Border DockPanel.Dock="Right" Width="220" Background="White" BorderBrush="#D4D8E0" BorderThickness="1,0,0,0"><DockPanel><Grid DockPanel.Dock="Top" Margin="8"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="최근 캡처" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/><Button Grid.Column="1" Content="삭제" Click="DeleteHistory_Click" Padding="5,3"/><Button Grid.Column="2" Content="전체 삭제" Click="ClearHistory_Click" Padding="5,3"/></Grid><ListBox x:Name="HistoryList" SelectionChanged="HistoryList_SelectionChanged" BorderThickness="0"><ListBox.ItemTemplate><DataTemplate><Border Margin="6" Padding="5" BorderBrush="#D5D9E2" BorderThickness="1" CornerRadius="5"><StackPanel><Image Source="{Binding Image}" Height="105" Stretch="Uniform"/><TextBlock Text="{Binding Title}" Margin="2,5,2,0" TextTrimming="CharacterEllipsis"/></StackPanel></Border></DataTemplate></ListBox.ItemTemplate></ListBox></DockPanel></Border>
