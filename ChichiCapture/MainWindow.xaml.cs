@@ -50,7 +50,7 @@ public partial class MainWindow:Window
  string Hotkey(bool w)=>$"{((w?settings.WindowCtrl:settings.Ctrl)?"Ctrl+":"")}{((w?settings.WindowShift:settings.Shift)?"Shift+":"")}{((w?settings.WindowAlt:settings.Alt)?"Alt+":"")}{(char)(w?settings.WindowHotKey:settings.HotKey)}";
  void Unregister(){var h=new WindowInteropHelper(this).Handle;if(h!=IntPtr.Zero){UnregisterHotKey(h,HK);UnregisterHotKey(h,HK_WINDOW);}if(hookSource!=null){hookSource.RemoveHook(Hook);hookSource=null;}}
  IntPtr Hook(IntPtr h,int m,IntPtr w,IntPtr l,ref bool done){if(m==WM_HOTKEY){if(w.ToInt32()==HK){done=true;BeginRegion();}else if(w.ToInt32()==HK_WINDOW){done=true;BeginWindow();}}return IntPtr.Zero;}
- void Main_KeyDown(object s,System.Windows.Input.KeyEventArgs e){if(e.Key==Key.Z&&Keyboard.Modifiers.HasFlag(ModifierKeys.Control)){Undo();e.Handled=true;}else if(e.Key==Key.Delete){DeleteSelected();e.Handled=true;}else if(e.Key==Key.Escape&&cropFrame!=null){CancelCrop_Click(this,new RoutedEventArgs());e.Handled=true;}else if(e.Key==Key.Escape&&selected!=null){SelectElement(null);e.Handled=true;}}
+ void Main_KeyDown(object s,System.Windows.Input.KeyEventArgs e){if(e.Key==Key.C&&Keyboard.Modifiers.HasFlag(ModifierKeys.Control)){CopyToClipboard();e.Handled=true;}else if(e.Key==Key.Z&&Keyboard.Modifiers.HasFlag(ModifierKeys.Control)){Undo();e.Handled=true;}else if(e.Key==Key.Delete){DeleteSelected();e.Handled=true;}else if(e.Key==Key.Escape&&cropFrame!=null){CancelCrop_Click(this,new RoutedEventArgs());e.Handled=true;}else if(e.Key==Key.Escape&&selected!=null){SelectElement(null);e.Handled=true;}}
 
  void RegionCapture_Click(object s,RoutedEventArgs e)=>BeginRegion();void WindowCapture_Click(object s,RoutedEventArgs e)=>BeginWindow();
  void BeginRegion(){Hide();Thread.Sleep(100);var p=new RegionWindow();if(p.ShowDialog()==true)Capture(p.Selection);else Restore();}
@@ -87,7 +87,7 @@ public partial class MainWindow:Window
  void CancelCrop_Click(object s,RoutedEventArgs e){if(cropFrame!=null){Overlay.Children.Remove(cropFrame);cropFrame=null;}}
  void Undo(){if(undo.Count>0)undo.Pop()();}
  BitmapSource Render(){var wasVisible=selectionBox.Visibility;selectionBox.Visibility=Visibility.Collapsed;var z=new System.Windows.Size(EditorHost.Width,EditorHost.Height);EditorHost.Measure(z);EditorHost.Arrange(new Rect(z));var r=new RenderTargetBitmap((int)z.Width,(int)z.Height,96,96,PixelFormats.Pbgra32);r.Render(EditorHost);selectionBox.Visibility=wasVisible;return r;}
- void Copy_Click(object s,RoutedEventArgs e){if(source!=null){Clipboard.SetImage(Render());StatusText.Text="클립보드에 복사했습니다.";}}
+ void CopyToClipboard(){if(source!=null){Clipboard.SetImage(Render());StatusText.Text="클립보드에 복사했습니다. (Ctrl+C)";}}
  void SavePng_Click(object s,RoutedEventArgs e){if(source==null)return;var d=new SaveFileDialog{Filter="PNG 이미지|*.png",InitialDirectory=Directory.Exists(settings.SaveFolder)?settings.SaveFolder:Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),FileName=FileName()};if(d.ShowDialog()==true){settings.SaveFolder=Path.GetDirectoryName(d.FileName)!;settings.Save();Save(d.FileName);}}
  void Save(string p){Directory.CreateDirectory(Path.GetDirectoryName(p)!);var e=new PngBitmapEncoder();e.Frames.Add(BitmapFrame.Create(Render()));using var f=File.Create(p);e.Save(f);StatusText.Text=$"저장: {p}";}
  string FileName()=>$"Capture_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.png";void AutoSave(){if(settings.AutoSave&&source!=null)Save(Path.Combine(settings.SaveFolder,FileName()));}
