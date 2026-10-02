@@ -34,7 +34,7 @@ public partial class MainWindow:Window
  public MainWindow(){
   InitializeComponent();
   // Catch Ctrl+C even when a focused child control has already handled the key.
-  AddHandler(Keyboard.PreviewKeyDownEvent,new KeyEventHandler(Main_KeyDown),true);
+  AddHandler(UIElement.PreviewKeyDownEvent,new KeyEventHandler(Main_KeyDown),true);
   var iconStream=System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("ChichiCapture.chichi.ico");tray=new Forms.NotifyIcon{Icon=iconStream==null?SystemIcons.Application:new Icon(iconStream),Text="ChichiCapture",Visible=true};
   var menu=new Forms.ContextMenuStrip();
   menu.Items.Add("영역 캡처",null,(_,_)=>Dispatcher.Invoke(BeginRegion));
