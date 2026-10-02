@@ -32,7 +32,9 @@ public partial class MainWindow:Window
  [DllImport("user32.dll")]static extern bool SetForegroundWindow(IntPtr h);
 
  public MainWindow(){
-  InitializeComponent();PreviewKeyDown+=Main_KeyDown;
+  InitializeComponent();
+  // Catch Ctrl+C even when a focused child control has already handled the key.
+  AddHandler(Keyboard.PreviewKeyDownEvent,new KeyEventHandler(Main_KeyDown),true);
   var iconStream=System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("ChichiCapture.chichi.ico");tray=new Forms.NotifyIcon{Icon=iconStream==null?SystemIcons.Application:new Icon(iconStream),Text="ChichiCapture",Visible=true};
   var menu=new Forms.ContextMenuStrip();
   menu.Items.Add("영역 캡처",null,(_,_)=>Dispatcher.Invoke(BeginRegion));
