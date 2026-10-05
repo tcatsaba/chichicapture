@@ -89,7 +89,18 @@ public partial class MainWindow:Window
  void CancelCrop_Click(object s,RoutedEventArgs e){if(cropFrame!=null){Overlay.Children.Remove(cropFrame);cropFrame=null;}}
  void Undo(){if(undo.Count>0)undo.Pop()();}
  BitmapSource Render(){var wasVisible=selectionBox.Visibility;selectionBox.Visibility=Visibility.Collapsed;var z=new System.Windows.Size(EditorHost.Width,EditorHost.Height);EditorHost.Measure(z);EditorHost.Arrange(new Rect(z));var r=new RenderTargetBitmap((int)z.Width,(int)z.Height,96,96,PixelFormats.Pbgra32);r.Render(EditorHost);selectionBox.Visibility=wasVisible;return r;}
- void CopyToClipboard(){if(source!=null){Clipboard.SetImage(Render());StatusText.Text="클립보드에 복사했습니다. (Ctrl+C)";}}
+ void CopyToClipboard(){
+  if(source==null)return;
+  var image=Render();
+  var encoder=new PngBitmapEncoder();encoder.Frames.Add(BitmapFrame.Create(image));
+  using var png=new MemoryStream();encoder.Save(png);var pngBytes=png.ToArray();
+  var data=new System.Windows.DataObject();
+  data.SetImage(image);
+  data.SetData("PNG",new MemoryStream(pngBytes));
+  data.SetData("image/png",new MemoryStream(pngBytes));
+  Clipboard.SetDataObject(data,true);
+  StatusText.Text="클립보드에 복사했습니다. 다른 채팅창에서 Ctrl+V로 붙여넣으세요.";
+ }
  void SavePng_Click(object s,RoutedEventArgs e){if(source==null)return;var d=new SaveFileDialog{Filter="PNG 이미지|*.png",InitialDirectory=Directory.Exists(settings.SaveFolder)?settings.SaveFolder:Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),FileName=FileName()};if(d.ShowDialog()==true){settings.SaveFolder=Path.GetDirectoryName(d.FileName)!;settings.Save();Save(d.FileName);}}
  void Save(string p){Directory.CreateDirectory(Path.GetDirectoryName(p)!);var e=new PngBitmapEncoder();e.Frames.Add(BitmapFrame.Create(Render()));using var f=File.Create(p);e.Save(f);StatusText.Text=$"저장: {p}";}
  string FileName()=>$"Capture_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.png";void AutoSave(){if(settings.AutoSave&&source!=null)Save(Path.Combine(settings.SaveFolder,FileName()));}
